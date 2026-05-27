@@ -1,4 +1,5 @@
 use std::fmt;
+use serde::Serialize;
 
 #[derive(thiserror::Error, Debug)]
 pub enum AreaParseError {
@@ -6,7 +7,7 @@ pub enum AreaParseError {
     UnknownPostCodeArea(String),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub enum PostCodeArea {
     Aberdeen,
     StAlbans,
@@ -403,3 +404,5 @@ impl PostCodeArea {
         }
     }
 }
+
+crate::macros::impl_deserialize!(PostCodeArea);

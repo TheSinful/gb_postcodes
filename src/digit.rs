@@ -1,4 +1,5 @@
 use std::fmt::Display;
+use serde::{Deserialize, Serialize};
 
 #[derive(thiserror::Error, Debug)]
 pub enum DigitParseError {
@@ -6,7 +7,7 @@ pub enum DigitParseError {
     OutOfBounds(u8),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Digit(u8);
 
 impl TryFrom<u8> for Digit {

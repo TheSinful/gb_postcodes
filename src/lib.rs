@@ -1,18 +1,14 @@
+use crate::{digit::Digit, inward::InwardCodeParseError, outward::OutwardCodeParseError};
+pub use inward::InwardCode;
+pub use outward::{OutwardCode, areas::PostCodeArea, district::PostCodeDistrict};
+use serde::{Deserialize, Serialize};
 #[cfg(feature = "geo")]
 use std::{collections::HashMap, sync::LazyLock};
 
-use crate::{
-    digit::Digit,
-    inward::{InwardCode, InwardCodeParseError},
-    outward::{
-        OutwardCode, OutwardCodeParseError, areas::PostCodeArea, district::PostCodeDistrict,
-    },
-};
-
+pub mod digit;
 pub mod inward;
+pub(crate) mod macros;
 pub mod outward;
-
-mod digit;
 #[cfg(test)]
 mod tests;
 
@@ -46,11 +42,13 @@ static MAP: LazyLock<HashMap<String, (f64, f64)>> = LazyLock::new(|| {
 });
 
 #[cfg(feature = "geo")]
+#[derive(Serialize, Deserialize)]
 pub struct GeoLocation {
     pub easting: f64,
     pub northing: f64,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct PostCode {
     pub inward_code: InwardCode,
     pub outward_code: OutwardCode,
@@ -74,7 +72,7 @@ impl PostCode {
         let outward_code = OutwardCode::new(split[0])?;
         let inward_code = InwardCode::new(split[1])?;
         let as_str = s;
-        #[cfg(feature = "geo")] 
+        #[cfg(feature = "geo")]
         let geo_tuple: &'static (f64, f64) = MAP
             .get(&as_str)
             .expect("should've found geo-location data for code from downloaded code-point data.");

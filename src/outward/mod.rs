@@ -3,11 +3,12 @@ const OUTWARD_LENGTH_UPPER: usize = 4;
 
 use crate::outward::district::{DistrictParseError, PostCodeDistrict};
 use areas::{AreaParseError, PostCodeArea};
-use std::fmt::Display;
+use serde::Serialize;
 
 pub mod areas;
 pub mod district;
 
+#[derive(Serialize)]
 pub struct OutwardCode {
     pub area: PostCodeArea,
     pub district: PostCodeDistrict,
@@ -51,3 +52,5 @@ impl OutwardCode {
         Ok(OutwardCode { area, district })
     }
 }
+
+crate::macros::impl_deserialize!(OutwardCode);

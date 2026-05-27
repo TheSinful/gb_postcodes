@@ -1,9 +1,12 @@
+use serde::Serialize;
 use crate::{
     digit::{Digit, DigitParseError},
     inward::InwardCodeParseError::{FailedToParseAsNum, UnexpectedLength},
 };
 
 const INWARDCODE_EXPECTED_LENGTH: usize = 3;
+
+#[derive(Serialize)]
 
 pub struct InwardCode {
     pub sector: Digit,
@@ -28,6 +31,8 @@ impl InwardCode {
         Ok(Self { sector, unit })
     }
 }
+
+crate::macros::impl_deserialize!(InwardCode);
 
 #[derive(thiserror::Error, Debug)]
 pub enum InwardCodeParseError {
