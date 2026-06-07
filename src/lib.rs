@@ -1,9 +1,10 @@
 use crate::{digit::Digit, inward::InwardCodeParseError, outward::OutwardCodeParseError};
-pub use inward::InwardCode;
-pub use outward::{OutwardCode, areas::PostCodeArea, district::PostCodeDistrict};
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "geo")]
 use std::{collections::HashMap, sync::LazyLock};
+
+pub use inward::InwardCode;
+pub use outward::{OutwardCode, areas::PostCodeArea, district::PostCodeDistrict};
 
 pub mod digit;
 pub mod inward;
@@ -119,5 +120,11 @@ impl PostCode {
 
     pub fn as_str(&self) -> &str {
         &self.as_str
+    }
+}
+
+impl PartialEq for PostCode {
+    fn eq(&self, other: &Self) -> bool {
+        self.as_str == other.as_str
     }
 }
