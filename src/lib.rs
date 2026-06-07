@@ -43,7 +43,7 @@ static MAP: LazyLock<HashMap<String, (f64, f64)>> = LazyLock::new(|| {
 });
 
 #[cfg(feature = "geo")]
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GeoLocation {
     pub easting: f64,
     pub northing: f64,
