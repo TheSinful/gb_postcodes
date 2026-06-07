@@ -49,7 +49,7 @@ pub struct GeoLocation {
     pub northing: f64,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone)]
 pub struct PostCode {
     pub inward_code: InwardCode,
     pub outward_code: OutwardCode,
@@ -120,6 +120,19 @@ impl PostCode {
 
     pub fn as_str(&self) -> &str {
         &self.as_str
+    }
+}
+
+impl<'de> Deserialize<'de> for PostCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let des = Self::new(String::deserialize(deserializer)?);
+        match des {
+            Ok(o) => Ok(o),
+            Err(e) => Err(serde::de::Error::custom(e.to_string())),
+        }
     }
 }
 
