@@ -8,7 +8,7 @@ use serde::Serialize;
 pub mod areas;
 pub mod district;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, Clone)]
 pub struct OutwardCode {
     pub area: PostCodeArea,
     pub district: PostCodeDistrict,

@@ -1,12 +1,12 @@
-use serde::Serialize;
 use crate::{
     digit::{Digit, DigitParseError},
     inward::InwardCodeParseError::{FailedToParseAsNum, UnexpectedLength},
 };
+use serde::Serialize;
 
 const INWARDCODE_EXPECTED_LENGTH: usize = 3;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, Clone)]
 
 pub struct InwardCode {
     pub sector: Digit,

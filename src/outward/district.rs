@@ -5,7 +5,7 @@ use std::fmt::Display;
 const DISTRICT_LENGTH_LOWER: usize = 1;
 const DISTRICT_UPPER_LOWER: usize = 2;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, Clone)]
 pub enum PostCodeDistrict {
     Normal(u32),
     Irregular(Digit, char),

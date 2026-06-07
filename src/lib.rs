@@ -49,7 +49,7 @@ pub struct GeoLocation {
     pub northing: f64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PostCode {
     pub inward_code: InwardCode,
     pub outward_code: OutwardCode,
