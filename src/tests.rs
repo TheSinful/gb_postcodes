@@ -195,3 +195,19 @@ mod geo {
         assert_eq!(geo.northing, NORTHING_DATA);
     }
 }
+
+#[cfg(feature = "use_near_codes")]
+mod nearby {
+    #[test]
+    fn test_finding_nearby_postcode() {
+        use crate::PostCode;
+        let non_existing = PostCode::new("NW6 6RH".to_string()).unwrap();
+        let existing = PostCode::new("NW6 6RJ".to_string()).unwrap();
+        // searches for the closest postcode by incrementing the last character of the sector
+        // if none exist, then it decrements iterating over every character
+        // if still none exist, then we finally throw an error
+
+        assert_eq!(non_existing.geo().easting, existing.geo().easting);
+        assert_eq!(non_existing.geo().northing, existing.geo().northing);
+    }
+}

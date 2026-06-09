@@ -9,6 +9,8 @@ pub use outward::{OutwardCode, areas::PostCodeArea, district::PostCodeDistrict};
 pub mod digit;
 pub mod inward;
 pub(crate) mod macros;
+#[cfg(feature = "use_near_codes")]
+mod nearby;
 pub mod outward;
 #[cfg(test)]
 mod tests;
@@ -27,7 +29,7 @@ pub enum PostcodeParseError {
     InvalidSpaceCount(String, usize),
 
     #[error("Given postcode: {0} doesn't exist within Codepoint-open database.")]
-    PosttCodeDoesntExist(String),
+    PostCodeDoesntExist(String),
 
     #[error(transparent)]
     OutwardCodeParseError(#[from] OutwardCodeParseError),
@@ -79,13 +81,29 @@ impl PostCode {
 
         let outward_code = OutwardCode::new(split[0])?;
         let inward_code = InwardCode::new(split[1])?;
+
         let as_str = s;
+
         #[cfg(feature = "geo")]
         let geo_tuple: &'static (f64, f64) = {
             let search = MAP.get(&as_str);
+
+            #[cfg(feature = "use_near_codes")]
             match search {
                 Some(s) => s,
-                None => return Err(PostcodeParseError::PosttCodeDoesntExist(as_str)),
+                None => {
+                    let found = nearby::find_nearby_postcode(&as_str);
+                    match found {
+                        Some(s) => s,
+                        None => return Err(PostcodeParseError::PostCodeDoesntExist(as_str)),
+                    }
+                }
+            }
+
+            #[cfg(not(feature = "use_near_codes"))]
+            match search {
+                Some(s) => s,
+                None => return Err(PostcodeParseError::PostCodeDoesntExist(as_str)),
             }
         };
 
