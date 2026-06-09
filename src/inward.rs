@@ -19,7 +19,13 @@ impl InwardCode {
             return Err(UnexpectedLength(s.len(), s.to_string()));
         }
 
-        let chars: Vec<char> = s.chars().collect();
+        let mut chars: Vec<char> = s.chars().collect();
+        if chars[0] == 'O' {
+            chars[0] = '0';
+        } else if chars[0] == 'I' {
+            chars[0] = '1';
+        }
+
         let first_char = match chars[0].to_digit(10) {
             Some(s) => s,
             None => return Err(FailedToParseAsNum(chars[0])),
