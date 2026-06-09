@@ -16,3 +16,4 @@ postcard = { version = "1.1.3", features = ["alloc"], optional = true }
 
 [features]
 geo = ["reqwest", "zip", "serde", "postcard"]
+use_near_codes = ["geo"]
