@@ -16,7 +16,7 @@ pub struct InwardCode {
 impl InwardCode {
     pub fn new(s: &str) -> Result<Self, InwardCodeParseError> {
         if s.len() != 3 {
-            return Err(UnexpectedLength(INWARDCODE_EXPECTED_LENGTH));
+            return Err(UnexpectedLength(s.len(), s.to_string()));
         }
 
         let chars: Vec<char> = s.chars().collect();
@@ -36,8 +36,8 @@ crate::macros::impl_deserialize!(InwardCode);
 
 #[derive(thiserror::Error, Debug)]
 pub enum InwardCodeParseError {
-    #[error("Unexpected length of string: {0}, expcted length of 3")]
-    UnexpectedLength(usize),
+    #[error("Unexpected inward code length: {0} (for inward-code: {1})length: expcted length of 3")]
+    UnexpectedLength(usize, String),
 
     #[error("Failed to parse first character: {0} as a number.")]
     FailedToParseAsNum(char),

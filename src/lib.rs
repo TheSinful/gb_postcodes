@@ -31,11 +31,11 @@ pub enum PostcodeParseError {
     #[error("Given postcode: {0} doesn't exist within Codepoint-open database.")]
     PostCodeDoesntExist(String),
 
-    #[error(transparent)]
-    OutwardCodeParseError(#[from] OutwardCodeParseError),
+    #[error("Failed to parse outward code of {0}; {1}")]
+    OutwardCodeParseError(String, OutwardCodeParseError),
 
-    #[error(transparent)]
-    InwardCodeParseError(#[from] InwardCodeParseError),
+    #[error("Failed to parse inward code of {0}; {1}")]
+    InwardCodeParseError(String, InwardCodeParseError),
 }
 
 #[cfg(feature = "geo")]
@@ -81,8 +81,11 @@ impl PostCode {
             ));
         }
 
-        let outward_code = OutwardCode::new(split[0])?;
-        let inward_code = InwardCode::new(split[1])?;
+        let outward_code = OutwardCode::new(split[0])
+            .map_err(|e| PostcodeParseError::OutwardCodeParseError(s.clone(), e))?;
+
+        let inward_code = InwardCode::new(split[1])
+            .map_err(|e| PostcodeParseError::InwardCodeParseError(s.clone(), e))?;
 
         let as_str = s;
 
