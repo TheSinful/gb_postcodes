@@ -21,14 +21,14 @@ const POSTCODE_EXPECTED_MAXIMUM_LENGTH: usize = 8;
 #[derive(thiserror::Error, Debug)]
 pub enum PostcodeParseError {
     #[error(
-        "Postcode length was invalid, expected a string of 6-8 characters but got: {0} one with {1} characters"
+        "Postcode length was invalid, expected a string of 6-8 characters but got: \"{0}\" with {1} characters"
     )]
     InvalidLength(String, usize),
 
-    #[error("Given postcode: {0} contained more than once space! found {1} spaces.")]
+    #[error("Postcode \"{0}\" contained more than one space! found {1} spaces.")]
     InvalidSpaceCount(String, usize),
 
-    #[error("Given postcode: {0} doesn't exist within Codepoint-open database.")]
+    #[error("Postcode \"{0}\" doesn't exist within Codepoint-open database.")]
     PostCodeDoesntExist(String),
 
     #[error("Failed to parse outward code of {0}; {1}")]
