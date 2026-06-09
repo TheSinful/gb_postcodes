@@ -19,9 +19,9 @@ const POSTCODE_EXPECTED_MAXIMUM_LENGTH: usize = 8;
 #[derive(thiserror::Error, Debug)]
 pub enum PostcodeParseError {
     #[error(
-        "Postcode length was invalid, expected a string of 6-8 characters but got one with {0} characters"
+        "Postcode length was invalid, expected a string of 6-8 characters but got: {0} one with {1} characters"
     )]
-    InvalidLength(usize),
+    InvalidLength(String, usize),
 
     #[error("Postcode contained more than once space! found {0} spaces.")]
     InvalidSpaceCount(usize),
@@ -62,7 +62,8 @@ impl PostCode {
     pub fn new(s: String) -> Result<Self, PostcodeParseError> {
         if s.len() < POSTCODE_EXPECTED_MINIMUM_LENGTH || s.len() > POSTCODE_EXPECTED_MAXIMUM_LENGTH
         {
-            return Err(PostcodeParseError::InvalidLength(s.len()));
+            let len = s.len();
+            return Err(PostcodeParseError::InvalidLength(s, len));
         }
 
         let split: Vec<&str> = s.split(" ").collect();
