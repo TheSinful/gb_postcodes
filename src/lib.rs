@@ -26,6 +26,9 @@ pub enum PostcodeParseError {
     #[error("Given postcode: {0} contained more than once space! found {1} spaces.")]
     InvalidSpaceCount(String, usize),
 
+    #[error("Given postcode: {0} doesn't exist within Codepoint-open database.")]
+    PosttCodeDoesntExist(String),
+
     #[error(transparent)]
     OutwardCodeParseError(#[from] OutwardCodeParseError),
 
@@ -78,9 +81,14 @@ impl PostCode {
         let inward_code = InwardCode::new(split[1])?;
         let as_str = s;
         #[cfg(feature = "geo")]
-        let geo_tuple: &'static (f64, f64) = MAP
-            .get(&as_str)
-            .expect("should've found geo-location data for code from downloaded code-point data.");
+        let geo_tuple: &'static (f64, f64) = {
+            let search = MAP.get(&as_str);
+            match search {
+                Some(s) => s,
+                None => return Err(PostcodeParseError::PosttCodeDoesntExist(as_str)),
+            }
+        };
+
         Ok(Self {
             inward_code,
             outward_code,
