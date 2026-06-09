@@ -23,8 +23,8 @@ pub enum PostcodeParseError {
     )]
     InvalidLength(String, usize),
 
-    #[error("Postcode contained more than once space! found {0} spaces.")]
-    InvalidSpaceCount(usize),
+    #[error("Given postcode: {0} contained more than once space! found {1} spaces.")]
+    InvalidSpaceCount(String, usize),
 
     #[error(transparent)]
     OutwardCodeParseError(#[from] OutwardCodeParseError),
@@ -68,7 +68,10 @@ impl PostCode {
 
         let split: Vec<&str> = s.split(" ").collect();
         if split.len() != 2 {
-            return Err(PostcodeParseError::InvalidSpaceCount(split.len()));
+            return Err(PostcodeParseError::InvalidSpaceCount(
+                s.clone(),
+                split.len(),
+            ));
         }
 
         let outward_code = OutwardCode::new(split[0])?;
