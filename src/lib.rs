@@ -65,7 +65,10 @@ pub struct PostCode {
 
 impl PostCode {
     pub fn new(s: String) -> Result<Self, PostcodeParseError> {
-        let s = s.trim_end().to_string();
+        let s = s
+            .trim_end()
+            .trim_end_matches(|c: char| !c.is_alphanumeric())
+            .to_string();
 
         if s.len() < POSTCODE_EXPECTED_MINIMUM_LENGTH || s.len() > POSTCODE_EXPECTED_MAXIMUM_LENGTH
         {
