@@ -1,5 +1,6 @@
 use crate::{digit::Digit, inward::InwardCodeParseError, outward::OutwardCodeParseError};
 use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 #[cfg(feature = "geo")]
 use std::{collections::HashMap, sync::LazyLock};
 
@@ -53,7 +54,12 @@ pub struct GeoLocation {
     pub easting: f64,
     pub northing: f64,
 }
-
+#[cfg(feature = "geo")]
+impl Display for GeoLocation {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}m E, {}m N", self.easting, self.northing)
+    }
+}
 #[derive(Serialize, Debug, Clone)]
 pub struct PostCode {
     pub inward_code: InwardCode,
