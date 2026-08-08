@@ -5,7 +5,7 @@
 [dependencies]
 gb_postcode = { version = "1.0.0", features = ["geo"] }
 ```
-*Note: geo-locational data is enabled by the geo feature, and fist compilation will be heavy as geo data must be downloaded*
+*Note: geo-locational data is enabled by the geo feature, and first compilation will be heavy as geo data must be downloaded*
 
 ## Example
 
